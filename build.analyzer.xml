@@ -1,0 +1,93 @@
+<project name="php" default="analyzer:run">
+    <property name="dir.build" value="${project.basedir}/build"/>
+    <property name="dir.reports" value="${dir.build}/logs"/>
+    <property name="dir.reports.pdepend" value="${dir.build}/pdepend"/>
+    <property name="dir.reports.coverage" value="${dir.reports}/coverage"/>
+    <property name="dir.reports.clover" value="${dir.reports}"/>
+    <target name="analyzer:run"
+            depends="analyzer:clean, analyzer:prepare, analyzer:lint, analyzer:cs, analyzer:phploc, analyzer:md, analyzer:cpd, analyzer:depend"
+            description="Run all test and build everything"/>
+    <!-- Run code style fixer -->
+    <target name="analyzer:php-cs-fixer" depends="analyzer:php-cs-fixer:download, analyzer:php-cs-fixer:fix" description="Run code style fixer..." />
+    <target name="analyzer:php-cs-fixer:download" description="Downloading php-cs-fixer...">
+        <echo msg="Downloading php-cs-fixer..."/>
+        <exec executable="bash" passthru="true" checkreturn="true">
+            <arg value="-c"/>
+            <arg value="curl http://cs.sensiolabs.org/get/php-cs-fixer.phar -o ./php-cs-fixer.phar"/>
+        </exec>
+    </target>
+    <target name="analyzer:php-cs-fixer:fix" description="Run fixer...">
+        <echo msg="Run fixer..."/>
+        <exec command="php ${project.basedir}/php-cs-fixer.phar fix ${dir.src}" passthru="true" checkreturn="true"></exec>
+    </target>
+    <!--  Cleanup before build  -->
+    <target name="analyzer:clean" description="Clean up build directories.">
+        <echo msg="Cleaning build directories ..."/>
+        <delete dir="${dir.build}" verbose="true"/>
+    </target>
+    <!--  Prepare for build  -->
+    <target name="analyzer:prepare" description="Create build directories.">
+        <echo msg="Creating build directories ..."/>
+        <echo msg="Creating build directories ..."/>
+        <mkdir dir="${dir.build}"/>
+        <mkdir dir="${dir.reports}"/>
+        <mkdir dir="${dir.reports.coverage}"/>
+        <mkdir dir="${dir.reports.clover}"/>
+        <mkdir dir="${dir.reports.pdepend}"/>
+    </target>
+    <!-- Javascript jshint -->
+    <target name="analyzer:jshint" description="Checks javascript coding standard.">
+        <echo msg="Checking javascript coding standard ..."/>
+        <exec passthru="true" command="jshint  ${dir.src} --jslint-reporter > ${dir.reports}/jshint.xml"/>
+    </target>
+    <!-- Code style target -->
+    <target name="analyzer:cs" description="Checks coding standard.">
+        <echo msg="Checking coding standard ..."/>
+        <phpcodesniffer standard="${codestandard}"
+                        showSniffs="true"
+                        showWarnings="true">
+            <fileset refid="sourcecode"/>
+            <formatter type="checkstyle" outfile="${dir.reports}/checkstyle.xml"/>
+        </phpcodesniffer>
+    </target>
+    <!-- Mess detector -->
+    <target name="analyzer:md" description="Generate code metrics.">
+        <echo msg="Generating code metrics ..."/>
+        <phpmd rulesets="phpmd.ruleset.xml">
+            <fileset refid="sourcecode"/>
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
+        </phpmd>
+    </target>
+    <!-- copy/paste detector -->
+    <target name="analyzer:cpd" description="Checks similar code blocks.">
+        <echo msg="Checking similar code blocks ..."/>
+        <phpcpd>
+            <fileset refid="sourcecode"/>
+            <formatter type="pmd" outfile="${dir.reports}/pmd-cpd.xml"/>
+        </phpcpd>
+    </target>
+    <!-- Code dependency -->
+    <target name="analyzer:depend" description="Checks coupling and dependency.">
+        <echo msg="Checking coupling and dependency ..."/>
+        <phpdepend>
+            <fileset refid="sourcecode"/>
+            <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
+            <logger type="jdepend-chart" outfile="${dir.reports.pdepend}/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="${dir.reports.pdepend}/overview-pyramid.svg"/>
+        </phpdepend>
+    </target>
+    <!-- PHP lint -->
+    <target name="analyzer:lint" description="Checks coding standard.">
+        <echo msg="Checking code syntaxis ..."/>
+        <phplint haltonfailure="true">
+            <fileset refid="sourcecode"/>
+        </phplint>
+    </target>
+    <!-- PHP loc -->
+    <target name="analyzer:phploc" description="Measure project size using PHPLOC">
+        <echo msg="Run phploc analyzer..."/>
+        <phploc reportType="csv" reportName="phploc" reportDirectory="${dir.reports}" countTests="true">
+            <fileset refid="sourcecode"/>
+        </phploc>
+    </target>
+</project>

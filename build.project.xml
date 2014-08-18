@@ -1,0 +1,59 @@
+<project name="project" default="build:basic:project">
+    <!--  Deploy accesses  -->
+    <!--  Testing  -->
+    <property name="deploy.testing.host" value="magento.pp.ciklum.com"/>
+    <property name="deploy.testing.configFile" value="magento.xml"/>
+    <property name="deploy.testing.user" value="jenkins"/>
+    <property name="deploy.testing.pubkeyfile" value="/var/lib/jenkins/.ssh/id_rsa.pub"/>
+    <property name="deploy.testing.privkeyfile" value="/var/lib/jenkins/.ssh/id_rsa"/>
+    <property name="deploy.testing.tmppath" value="/tmp/store"/>
+    <property name="deploy.testing.path" value="/var/www/store"/>
+
+    <!--  Stage  -->
+    <property name="deploy.stage.host" value="magento.pp.ciklum.com"/>
+    <property name="deploy.stage.configFile" value="magento.xml"/>
+    <property name="deploy.stage.user" value="jenkins"/>
+    <property name="deploy.stage.pubkeyfile" value="/var/lib/jenkins/.ssh/id_rsa.pub"/>
+    <property name="deploy.stage.privkeyfile" value="/var/lib/jenkins/.ssh/id_rsa"/>
+    <property name="deploy.stage.tmppath" value="/tmp/store"/>
+    <property name="deploy.stage.path" value="/var/www/store"/>
+
+    <!--  Release  -->
+    <property name="deploy.release.host" value="magento.pp.ciklum.com"/>
+    <property name="deploy.release.configFile" value="magento.xml"/>
+    <property name="deploy.release.user" value="jenkins"/>
+    <property name="deploy.release.pubkeyfile" value="/var/lib/jenkins/.ssh/id_rsa.pub"/>
+    <property name="deploy.release.privkeyfile" value="/var/lib/jenkins/.ssh/id_rsa"/>
+    <property name="deploy.release.tmppath" value="/tmp/store"/>
+    <property name="deploy.release.path" value="/var/www/store"/>
+
+    <!-- Directories -->
+    <property name="dir.src" value="${project.basedir}/app/code/local"/>
+    <property name="dir.unittest" value="${project.basedir}/app"/>
+
+    <!-- Code style standard -->
+    <property name="codestandard" value="Zend"/>
+
+    <!--  What should be deployed  -->
+    <fileset id="deploy" dir="${project.basedir}">
+        <include name="**"/>
+        <exclude name=".idea**"/>
+        <exclude name=".git**"/>
+        <exclude name="build**.xml"/>
+    </fileset>
+
+    <!-- Source code fileset for different checks -->
+    <fileset id="sourcecode" dir="${dir.src}">
+        <include name="**/*.php"/>
+        <exclude name="**/*Test.php"/>
+    </fileset>
+
+    <!--  First target before deploy  -->
+    <target name="build:basic:project" description="First target before build...">
+        <echo msg="Some works before archive project..."/>
+    </target>
+
+    <!--  Finnaly target after build  -->
+    <target name="deploy:basic:project" description="Finally target after build...">
+    </target>
+</project>

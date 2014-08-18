@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ciklum translate="label" module="ciklum_home">
+            <label>Ciklum.com</label>
+            <sort_order>104</sort_order>
+        </ciklum>
+    </tabs>
+    <sections>
+        <ciklum translate="label" module="ciklum_home">
+            <label>Ciklum</label>
+            <tab>ciklum</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>90</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <home translate="label">
+                    <label>Home page</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <featured_number translate="label comment">
+                            <label>Featured products qty</label>
+                            <comment>Number of featured products on the home page.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>required-entry validate-digits</frontend_class>
+                        </featured_number>
+                    </fields>
+                </home>
+            </groups>
+        </ciklum>
+    </sections>
+</config>

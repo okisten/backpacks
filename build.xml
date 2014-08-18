@@ -1,0 +1,130 @@
+<project name="${project.name}" basedir="." default="build:release">
+
+    <!--   Properties   -->
+    <property name="projectName" value="${project.name}"/>
+    <property name="deploy.excludefile" value="rsync.exclude"/>
+    <property name="deploy.file" value="deploy.tar"/>
+
+    <!--   Project configuration   -->
+    <import file="build.project.xml"/>
+    <import file="build.analyzer.xml"/>
+
+    <!--   Main targets  -->
+    <target name="build:testing"
+            depends="build:clean, build:basic:project, deploy:testing"
+            description="Run all test and build everything on TEST server"/>
+    <target name="build:stage"
+            depends="build:clean, build:basic:project, deploy:stage"
+            description="Run all test and build on STAGE server"/>
+    <target name="build:release"
+            depends="build:clean, build:basic:project, deploy:release"
+            description="Build everything on RELEASE server"/>
+
+    <!--   Cleanup before build   -->
+    <target name="build:clean" description="Clean up build directories.">
+        <echo msg="Cleaning build directories ..."/>
+        <delete file="${deploy.file}" verbose="true"/>
+    </target>
+
+    <!--   General deploy   -->
+    <target name="deploy:basic"
+            depends="deploy:basic:tar, deploy:basic:check, deploy:basic:scp, deploy:basic:run, deploy:basic:project"
+            description="General deployment. Deploy config should be set before use"/>
+
+    <!--   Gzip project   -->
+    <target name="deploy:basic:tar" description="Builds tar">
+        <tar destfile="${project.basedir}/${deploy.file}" compression="gzip">
+            <fileset refid="deploy"/>
+        </tar>
+    </target>
+
+    <!--   Creating distination directory   -->
+    <target name="deploy:basic:check" description="Checking destination existance ...">
+        <echo msg="Creating distination directory..."/>
+        <ssh username="${deploy.user}" pubkeyfile="${deploy.pubkeyfile}" privkeyfile="${deploy.privkeyfile}"
+             host="${deploy.host}" command="mkdir -p ${deploy.tmppath};"/>
+    </target>
+
+    <!--   Copy project archive to distination directory   -->
+    <target name="deploy:basic:scp" description="Scp tar to destination ...">
+        <echo msg="Scp tar to destination ..."/>
+        <exec executable="scp">
+            <arg value="${project.basedir}/${deploy.file}"/>
+            <arg value="${deploy.user}@${deploy.host}:${deploy.tmppath}/${deploy.file}"/>
+        </exec>
+    </target>
+
+    <!--   General build   -->
+    <target name="deploy:basic:run"
+            depends="deploy:basic:extract, deploy:basic:rsynk, deploy:basic:cleangarbage, deploy:basic:project"
+            description="General building"/>
+
+    <!--   Extract archive   -->
+    <target name="deploy:basic:extract" description="Extract archive ...">
+        <echo msg="Extracting archive..."/>
+        <ssh username="${deploy.user}" pubkeyfile="${deploy.pubkeyfile}" privkeyfile="${deploy.privkeyfile}"
+             host="${deploy.host}" command=" cd ${deploy.tmppath}; tar -xvf ${deploy.file}; rm ${deploy.file}; "/>
+    </target>
+
+    <!--   Run rsynk   -->
+    <target name="deploy:basic:rsynk" description="Executing rsynk...">
+        <echo msg="Executing rsynk ..."/>
+        <ssh username="${deploy.user}" pubkeyfile="${deploy.pubkeyfile}" privkeyfile="${deploy.privkeyfile}"
+             host="${deploy.host}" command="rsync -r -v --exclude-from=${deploy.tmppath}/${deploy.excludefile} --delete ${deploy.tmppath}/ ${deploy.path}/;"/>
+    </target>
+
+    <!--   Clean garbage   -->
+    <target name="deploy:basic:cleangarbage" description="Clean garbage...">
+        <echo msg="Cleaning garbage..."/>
+        <ssh username="${deploy.user}" pubkeyfile="${deploy.pubkeyfile}" privkeyfile="${deploy.privkeyfile}"
+             host="${deploy.host}" command="rm -rf ${deploy.tmppath};"/>
+    </target>
+
+    <!--   Testing deployment   -->
+    <target name="deploy:testing" description="Testing deployment">
+        <phingcall target="deploy:basic">
+            <property name="deploy.user" value="${deploy.testing.user}"/>
+            <property name="deploy.pubkeyfile" value="${deploy.testing.pubkeyfile}"/>
+            <property name="deploy.privkeyfile" value="${deploy.testing.privkeyfile}"/>
+            <property name="deploy.host" value="${deploy.testing.host}"/>
+            <property name="deploy.tmppath" value="${deploy.testing.tmppath}"/>
+            <property name="deploy.path" value="${deploy.testing.path}"/>
+            <property name="project.basedir" value="${project.basedir}"/>
+            <property name="deploy.excludefile" value="${deploy.excludefile}"/>
+            <property name="deploy.file" value="${deploy.file}"/>
+            <property name="deploy.configFile" value="${deploy.configFile}"/>
+        </phingcall>
+    </target>
+
+    <!--   Stage deployment   -->
+    <target name="deploy:stage" description="Stage deployment">
+        <phingcall target="deploy:basic">
+            <property name="deploy.user" value="${deploy.stage.user}"/>
+            <property name="deploy.pubkeyfile" value="${deploy.stage.pubkeyfile}"/>
+            <property name="deploy.privkeyfile" value="${deploy.stage.privkeyfile}"/>
+            <property name="deploy.host" value="${deploy.stage.host}"/>
+            <property name="deploy.tmppath" value="${deploy.stage.tmppath}"/>
+            <property name="deploy.path" value="${deploy.stage.path}"/>
+            <property name="project.basedir" value="${project.basedir}"/>
+            <property name="deploy.excludefile" value="${deploy.excludefile}"/>
+            <property name="deploy.file" value="${deploy.file}"/>
+            <property name="deploy.configFile" value="${deploy.configFile}"/>
+        </phingcall>
+    </target>
+
+    <!--   Release deployment   -->
+    <target name="deploy:release" description="Release deployment">
+        <phingcall target="deploy:basic">
+            <property name="deploy.user" value="${deploy.release.user}"/>
+            <property name="deploy.pubkeyfile" value="${deploy.release.pubkeyfile}"/>
+            <property name="deploy.privkeyfile" value="${deploy.release.privkeyfile}"/>
+            <property name="deploy.host" value="${deploy.release.host}"/>
+            <property name="deploy.tmppath" value="${deploy.release.tmppath}"/>
+            <property name="deploy.path" value="${deploy.release.path}"/>
+            <property name="project.basedir" value="${project.basedir}"/>
+            <property name="deploy.excludefile" value="${deploy.excludefile}"/>
+            <property name="deploy.file" value="${deploy.file}"/>
+            <property name="deploy.configFile" value="${deploy.configFile}"/>
+        </phingcall>
+    </target>
+</project>

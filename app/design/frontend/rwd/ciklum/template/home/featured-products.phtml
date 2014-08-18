@@ -1,0 +1,25 @@
+<?php
+/**
+ * @var $this Ciklum_Home_Block_FeaturedProducts
+ */
+?>
+<?php $products = $this->getProducts(); ?>
+<?php if (count($products) > 0) : ?>
+    <div class="featured-products">
+        <h2 class="featured-products-header"><?php echo $this->__('Featured extensions') ?></h2>
+        <?php $products = $this->getProducts(); ?>
+        <div class="home-products-container featured-products-container">
+            <?php foreach ($products as $product): ?>
+                <div class="home-product-container">
+                    <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>" class="home-product-link">
+                        <?php $imgSrc = $this->helper('catalog/image')->init($product, 'small_image')->resize(240); ?>
+                        <img src="<?php echo $imgSrc; ?>" width="156" height="156" data-initial-src="<?php echo $imgSrc; ?>" alt="<?php echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>" class="home-catalog-img"/>
+                        <span class="featured-product-name"><?php echo $product->getName(); ?></span>
+                        <span class="featured-product-desc"><?php echo $product->getShortDescription(); ?></span>
+                    </a>
+                    <?php echo $this->getPriceHtml($product) ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
