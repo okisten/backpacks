@@ -1,0 +1,146 @@
+<?php
+/**
+ * @see Mage_Adminhtml_Block_Catalog_Product
+ */
+?>
+<svg viewBox="0 0 68 12" height="12" width="68" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" display="none">
+    <defs>
+        <g id="icon-minus">
+            <path class="path1" d="M6 0c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.687 6-6-2.687-6-6-6zM6 10.5c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5 4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5zM3 6.75h6v-1.5h-6v1.5z">
+        </g>
+        <g id="icon-plus">
+            <path class="path1" d="M6 0c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.687 6-6-2.687-6-6-6zM6 10.5c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5 4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5zM9 6.75h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25v-2.25h1.5v2.25h2.25z">
+        </g>
+        <g id="icon-cancel">
+            <path class="path1" d="M10.242 1.757c-2.342-2.343-6.142-2.343-8.485 0s-2.344 6.142 0 8.485c2.343 2.344 6.142 2.344 8.485 0 2.344-2.342 2.344-6.142 0-8.485zM9.181 9.181c-1.757 1.758-4.606 1.758-6.364 0s-1.757-4.606 0-6.364c1.757-1.757 4.606-1.757 6.364 0s1.758 4.606 0 6.364zM7.060 6l1.591 1.591-1.061 1.061-1.591-1.591-1.591 1.591-1.061-1.061 1.591-1.591-1.591-1.591 1.061-1.061 1.591 1.591 1.591-1.591 1.061 1.061z">
+        </g>
+    </defs>
+</svg>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;"><h3
+                    class="icon-head head-products"><?php echo Mage::helper('catalog')->__('Manage Products') ?></h3>
+            </td>
+            <td class="a-right">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<?php if (!$this->isSingleStoreMode()): ?>
+    <?php echo $this->getChildHtml('store_switcher'); ?>
+<?php endif; ?>
+<div id="js-productgrid-collumn-managment"
+     <?php if (!$this->helper('ciklum_productgrid')->isEditedCollumns()): ?>style="display:none"<?php endif; ?>>
+    <form id="js-productgrid-apply-show-hide-fields"
+          action="<?php echo $this->getUrl('ciklum_productgrid/adminhtml_index/applyHideFields') ?>" method="post">
+        <table class="fields-by-default fields-table">
+            <tr>
+                <td class="grid-action-header">
+                    <h3 class="grid-action-h3"><?php echo Mage::helper('ciklum_productgrid')->__('Default fields') ?></h3>
+                    <p class="grid-action-condition"><?php echo Mage::helper('ciklum_productgrid')->__('Check the ones you want to hide') ?></p>
+                </td>
+
+                <td class="grid-action">
+                    <ul>
+                        <li class="field-li field-to-hide">
+                            <input class="hidefields" type="checkbox" name="hidefields[]" value="id"
+                            <?php if (Mage::helper('ciklum_productgrid')->isFieldHide('id')): ?>checked<?php endif; ?> >
+                            <label><?php echo Mage::helper('ciklum_productgrid')->__('Id') ?></label>
+                        </li>
+
+                        <?php foreach ($this->helper('ciklum_productgrid')->getDefaultAttributes() as $attribute): ?>
+                            <li class="field-li field-to-hide">
+                                <input class="hidefields" type="checkbox" name="hidefields[]"
+                                       value="<?php echo $attribute->getAttributeCode(); ?>"
+                                       <?php if (Mage::helper('ciklum_productgrid')->isFieldHide($attribute->getAttributeCode())): ?>checked<?php endif; ?> >
+                                <label><?php echo $attribute->getStoreLabel($this->getRequest()->getParam('store')); ?></label>
+                            </li>
+                        <?php endforeach; ?>
+
+                        <?php if (!Mage::app()->isSingleStoreMode()): ?>
+                            <li class="field-li field-to-hide">
+                                <input class="hidefields" type="checkbox" name="hidefields[]" value="websites"
+                                       <?php if (Mage::helper('ciklum_productgrid')->isFieldHide('websites')): ?>checked<?php endif; ?> >
+                                <label><?php echo Mage::helper('ciklum_productgrid')->__('Websites') ?></label>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if ($this->helper('catalog')->isModuleEnabled('Mage_CatalogInventory')): ?>
+                            <li class="field-li field-to-hide">
+                                <input class="hidefields" type="checkbox" name="hidefields[]" value="is_in_stock"
+                                       <?php if (Mage::helper('ciklum_productgrid')->isFieldHide('is_in_stock')): ?>checked<?php endif; ?> >
+                                <label><?php echo Mage::helper('ciklum_productgrid')->__('Stock') ?></label>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <input type="hidden" name="additionalfields"
+               value="<?php echo Mage::helper('ciklum_productgrid')->outputAdditionalFields(); ?>" width="200px"
+               size="120">
+
+        <table class="fields-to-remove fields-table">
+            <tr>
+                <td class="grid-action-header">
+                    <h3 class="grid-action-h3"><?php echo Mage::helper('ciklum_productgrid')->__('Added fields') ?></h3>
+                    <p class="grid-action-condition"><?php echo Mage::helper('ciklum_productgrid')->__('Click to remove from product grid') ?></p>
+                </td>
+
+                <td class="grid-action">
+                    <ul id="js-productgrid-remove-attr-from-grid">
+                        <?php $addedAttributes = $this->helper('ciklum_productgrid')->getAddedAttributes(); ?>
+                        <?php if (count($addedAttributes) === 0) : ?>
+                            <li><?php echo Mage::helper('ciklum_productgrid')->__('You are using default product grid with no custom columns in it. Add custom attributes by clicking the one(s) you need in the list below.') ?></li>
+                        <?php else: ?>
+                            <?php foreach ($addedAttributes as $attribute): ?>
+                                <li data-code="<?php echo $attribute->getAttributeCode(); ?>"
+                                    class="field-li field-to-remove">
+                            <span>
+                                <?php echo $attribute->getStoreLabel($this->getRequest()->getParam('store')); ?>
+                                [<?php echo $attribute->getAttributeCode(); ?>]
+                                <svg class="svg-icon icon-minus" viewBox="0 0 12 12">
+                                    <use xlink:href="#icon-minus">
+                                </svg>
+                            </span>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <table class="fields-to-add fields-table">
+            <tr>
+                <td class="grid-action-header">
+                    <h3 class="grid-action-h3"><?php echo Mage::helper('ciklum_productgrid')->__('Available fields') ?></h3>
+                    <p class="grid-action-condition"><?php echo Mage::helper('ciklum_productgrid')->__('Click to add to product grid') ?></p>
+                </td>
+
+                <td class="grid-action">
+                    <ul id="js-productgrid-add-attr-to-grid">
+                        <?php foreach ($this->helper('ciklum_productgrid')->getAvaliableAttributes() as $attribute): ?>
+                            <li data-code="<?php echo $attribute->getAttributeCode(); ?>" class="field-li field-to-add">
+                               <span>
+                                   <?php echo $attribute->getStoreLabel($this->getRequest()->getParam('store')); ?>
+                                   [<?php echo $attribute->getAttributeCode(); ?>]
+                                   <svg class="svg-icon icon-plus" viewBox="0 0 12 12">
+                                       <use xlink:href="#icon-plus">
+                                   </svg>
+                               </span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </form>
+
+</div>
+<script></script>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>

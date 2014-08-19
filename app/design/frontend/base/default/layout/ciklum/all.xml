@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <!-- If jQuery is required for your code to work, just use this -->
+        <!-- It is better not to add this to <default> handle as it affects overall performance-->
+        <!--
+        <reference name="head">
+            <action method="addItem" ifconfig="ciklum_all/settings/use_own_jquery_on_frontend">
+                <type>before_js</type>
+                <name>ciklum/jquery-1.10.1.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>before_js</type>
+                <name>ciklum/jquery.noconflict.js</name>
+            </action>
+        </reference>
+        -->
+    </default>
+</layout>

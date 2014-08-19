@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_catalog_product_index>
+        <reference name="head">
+            <action method="addItem" ifconfig="ciklum_all/settings/use_own_jquery_on_backend">
+                <type>before_js</type>
+                <name>ciklum/jquery-1.10.1.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>before_js</type>
+                <name>ciklum/jquery.noconflict.js</name>
+            </action>
+            <action method="addItem"  ifconfig="ciklum_productgrid/settings/active" value="1" ><type>js_css</type><name>ciklum/productgrid/productgrid.css</name></action>
+            <action method="addJs" ifconfig="ciklum_productgrid/settings/active" value="1"><script>ciklum/productgrid/productgrid.js</script></action>
+        </reference>
+    </adminhtml_catalog_product_index>
+</layout>

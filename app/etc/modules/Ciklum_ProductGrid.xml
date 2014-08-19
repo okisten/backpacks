@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ciklum_ProductGrid>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Ciklum_All/>
+            </depends>
+        </Ciklum_ProductGrid>
+    </modules>
+</config>

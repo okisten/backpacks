@@ -1,0 +1,61 @@
+.fields-table {width:100%;}
+.grid-action-header {padding:3px 10px 3px 0;vertical-align:top;}
+.grid-action-header, .grid-action {padding:3px 10px;vertical-align:top;}
+.grid-action-header {width:15%;}
+.grid-action-h3 {margin:0;}
+.grid-action-condition {font-size:11px;margin:0;}
+.fields-to-add {border-bottom:1px dotted #BBB;margin-bottom:11px;}
+.field-sign {display:inline-block;border:1px solid;border-radius:10px;padding:0 3px;line-height:12px;margin-left:5px;}
+
+.productgrid_list_edit, .productgrid-list-save{
+    background: #52A859;
+    border-color:green;
+}
+
+.productgrid-list-cancel{
+    background: #B04638;
+    border-color:#A04300;
+}
+.productgrid-list-reset{
+    background: #ED6502;
+    border-color:#A04300;
+}
+
+.productgrid_list_edit:hover, .productgrid-list-save:hover, .productgrid-list-cancel:hover, .productgrid-list-reset:hover {border-color:#ED6502 #A04300 #A04300 #ED6502}
+
+.js-editable-changed{
+    background-color: #ffffd9;
+}
+
+.rtl{
+    direction:rtl;
+}
+
+.lastsaved-field{
+    background-color: #D8F2BD;
+}
+
+.field-li {display: inline-block;vertical-align:top;margin:0 10px 10px 0;padding:3px 7px;background:#EEE;border-radius:2px;cursor:pointer;}
+.field-li:hover {background-color:#97D996;}
+.field-li:hover .icon {color:#2f2f2f;}
+.field-li.field-to-remove:hover  {background-color:#ED8787;}
+.field-li.field-to-hide:hover {background-color:#DDD;}
+
+/* icons */
+.svg-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 13px;
+    height: 12px;
+    fill: currentColor;
+    margin:0 0 2px 2px;
+}
+.icon-minus {
+    color:#AD564B;
+}
+.icon-plus {
+    color:#52A859;
+}
+.icon-cancel {
+    color:#AD564B;
+}
